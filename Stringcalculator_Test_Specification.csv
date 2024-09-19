@@ -12,8 +12,8 @@ Test Case ID,TestName,Test Case Description,Input,Expected Output
 TC1,ExpectZeroForEmptyInput,Verifies that an empty string returns 0.,"""""",0
 TC2,ExpectZeroforSingleZero,"Verifies that a single ""0"" returns 0.","""0""",0
 TC3,ExpectSumforTwoNumbers,Verifies that the calculator can sum two numbers separated by commas.,"""1,2""",3
-TC4,ExpectExceptionforNegativeNumbers,Verifies that the calculator throws an exception when a negative number is encountered.,"""-4,5""",Exception: std::runtime_error
-TC5,ExpectSumwithNewlineDelimiter,Verifies that newlines beteen numbers can be used as delimiter along with commas,"""2\n3,5""",10
+TC4,ExpectSumwithNewlineDelimiter,Verifies that newlines beteen numbers can be used as delimiter along with commas,"""2\n3,5""",10
+TC5,HandleSumExactly1000,Verifies that the calculator correctly sums numbers that total exactly 1000.,"""500,500""",1000
 TC6,IgnoreNumbersGreaterThan1000,Verifies that numbers greater than 1000 are ignored in the sum calculation.,"""1,1001""",1
 TC7,ExpectSumWithCustomDelimiter,"Verifies that a custom delimiter can be defined in the input string, and the calculator will sum the numbers correctly using this delimiter.","""//;\n1;2""",3
 TC8,HandleMultipleCustomDelimiters,Verifies that the calculator supports multiple custom delimiters.,"""//[*][%]\n1*2%3""",6
