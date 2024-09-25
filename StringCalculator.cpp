@@ -68,3 +68,28 @@ int StringCalculator::ignoreNumbersGreaterThan1000(const std::vector<int>& numbe
     }
     return sum;
 }
+std::string StringCalculator::extractDelimiter(std::string& numbers) {
+    std::string delimiter = ",";
+    
+    if (numbers.rfind("//", 0) == 0) {
+        size_t newlinePos = numbers.find("\n");
+        delimiter = numbers.substr(2, newlinePos - 2);
+        numbers = numbers.substr(newlinePos + 1);  // Remove delimiter line from the numbers string
+    }
+    
+    return delimiter;
+}
+
+std::vector<std::string> StringCalculator::split(const std::string& str, const std::string& delimiter) {
+    std::vector<std::string> tokens;
+    size_t start = 0;
+    size_t end = 0;
+
+    while ((end = str.find(delimiter, start)) != std::string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+        start = end + delimiter.length();
+    }
+    tokens.push_back(str.substr(start));
+
+    return tokens;
+}
