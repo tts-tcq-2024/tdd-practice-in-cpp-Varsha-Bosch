@@ -2,10 +2,7 @@
 #define STRINGCALCULATOR_H
 
 #include <string>
-#include <sstream>
-#include <stdexcept>
 #include <vector>
-#include <algorithm>
 
 class StringCalculator {
 public:
@@ -14,9 +11,9 @@ public:
 private:
     std::vector<int> split(const std::string& numbers, const std::string& delimiter);
     std::string extractDelimiter(std::string& numbers);
-    void checkForNegatives(const std::vector<int>& numbers);
+    std::vector<int> checkForNegatives(const std::vector<int>& numbers); // Pure function
     int ignoreNumbersGreaterThan1000(const std::vector<int>& numbers);
-    std::string formatNegatives(const std::vector<int>& negatives);
+    std::string formatNegatives(const std::vector<int>& negatives); // New helper function
 };
 
 #endif // STRINGCALCULATOR_H
