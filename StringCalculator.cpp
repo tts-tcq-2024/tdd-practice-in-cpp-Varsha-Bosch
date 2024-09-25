@@ -1,5 +1,8 @@
 #include "StringCalculator.h"
-#include <algorithm> // For std::copy_if, std::find_if
+#include <algorithm> // For std::copy_if
+#include <numeric>   // For std::accumulate
+#include <sstream>   // For std::ostringstream
+#include <stdexcept> // For std::runtime_error
 
 // Main add method
 int StringCalculator::add(const std::string& numbers) {
@@ -20,46 +23,20 @@ int StringCalculator::add(const std::string& numbers) {
 
     std::vector<int> numberList = split(modifiedNumbers, delimiter);
 
-    // Check for negative numbers and throw an exception if any exist
-    checkForNegatives(numberList);
+    // Get the list of negative numbers from the pure function
+    std::vector<int> negatives = checkForNegatives(numberList);
+
+    // If there are any negative numbers, throw an exception
+    if (!negatives.empty()) {
+        throw std::runtime_error("negatives not allowed: " + formatNegatives(negatives));
+    }
 
     // Ignore numbers greater than 1000 and return the sum
     return ignoreNumbersGreaterThan1000(numberList);
 }
 
-// Splitting numbers using a given delimiter
-std::vector<int> StringCalculator::split(const std::string& numbers, const std::string& delimiter) {
-    std::vector<int> result;
-    std::string token;
-    size_t start = 0;
-    size_t end = numbers.find(delimiter);
-
-    while (end != std::string::npos) {
-        token = numbers.substr(start, end - start);
-        result.push_back(std::stoi(token));
-        start = end + delimiter.length();
-        end = numbers.find(delimiter, start);
-    }
-    
-    // Last token
-    result.push_back(std::stoi(numbers.substr(start)));
-
-    return result;
-}
-
-// Extract delimiter from the custom delimiter input
-std::string StringCalculator::extractDelimiter(std::string& numbers) {
-    size_t delimiterStart = 2; // Skipping the "//"
-    size_t delimiterEnd = numbers.find("\n");
-
-    std::string delimiter = numbers.substr(delimiterStart, delimiterEnd - delimiterStart);
-    numbers = numbers.substr(delimiterEnd + 1); // Remove the delimiter part from the numbers
-
-    return delimiter;
-}
-
-// Refactored check for negative numbers
-void StringCalculator::checkForNegatives(const std::vector<int>& numbers) {
+// Pure function: Returns a list of negative numbers, does not throw exceptions
+std::vector<int> StringCalculator::checkForNegatives(const std::vector<int>& numbers) {
     std::vector<int> negatives;
 
     // Use std::copy_if to collect all negative numbers
@@ -67,16 +44,20 @@ void StringCalculator::checkForNegatives(const std::vector<int>& numbers) {
         return number < 0;
     });
 
-    // If there are any negative numbers, throw the exception
-    if (!negatives.empty()) {
-        std::ostringstream oss;
-        oss << "negatives not allowed: ";
-        for (size_t i = 0; i < negatives.size(); ++i) {
-            if (i > 0) oss << ",";
-            oss << negatives[i];
-        }
-        throw std::runtime_error(oss.str());
+    return negatives; // Returning the negatives (empty if none found)
+}
+
+// Helper function to format negative numbers into a comma-separated string
+std::string StringCalculator::formatNegatives(const std::vector<int>& negatives) {
+    if (negatives.empty()) {
+        return "";
     }
+
+    // Use std::accumulate to concatenate the negative numbers into a string
+    return std::accumulate(negatives.begin() + 1, negatives.end(),
+        std::to_string(negatives[0]), [](const std::string& a, int b) {
+            return a + "," + std::to_string(b);
+        });
 }
 
 // Ignore numbers greater than 1000 and return the sum
