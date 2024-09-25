@@ -1,10 +1,9 @@
 #include "StringCalculator.h"
-#include <algorithm> // For std::copy_if
-#include <numeric>   // For std::accumulate
-#include <sstream>   // For std::ostringstream
-#include <stdexcept> // For std::runtime_error
+#include <algorithm> 
+#include <numeric>  
+#include <sstream>   
+#include <stdexcept> 
 
-// Main add method
 int StringCalculator::add(const std::string& numbers) {
     if (numbers.empty()) {
         return 0;
@@ -13,7 +12,7 @@ int StringCalculator::add(const std::string& numbers) {
     std::string delimiter = ",";
     std::string modifiedNumbers = numbers;
 
-    // Check for custom delimiter
+   
     if (numbers.rfind("//", 0) == 0) {
         delimiter = extractDelimiter(modifiedNumbers);
     }
@@ -35,7 +34,6 @@ int StringCalculator::add(const std::string& numbers) {
     return ignoreNumbersGreaterThan1000(numberList);
 }
 
-// Pure function: Returns a list of negative numbers, does not throw exceptions
 std::vector<int> StringCalculator::checkForNegatives(const std::vector<int>& numbers) {
     std::vector<int> negatives;
 
@@ -47,7 +45,6 @@ std::vector<int> StringCalculator::checkForNegatives(const std::vector<int>& num
     return negatives; // Returning the negatives (empty if none found)
 }
 
-// Helper function to format negative numbers into a comma-separated string
 std::string StringCalculator::formatNegatives(const std::vector<int>& negatives) {
     if (negatives.empty()) {
         return "";
