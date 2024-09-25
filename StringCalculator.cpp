@@ -66,6 +66,5 @@ int StringCalculator::ignoreNumbersGreaterThan1000(const std::vector<int>& numbe
             sum += number;
         }
     }
-
     return sum;
 }
