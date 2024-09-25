@@ -20,7 +20,7 @@ int StringCalculator::add(const std::string& numbers) {
     // Replace newline with the delimiter to handle the "\n" case
     std::replace(modifiedNumbers.begin(), modifiedNumbers.end(), '\n', delimiter[0]);
 
-    std::vector<int> numberList = split(modifiedNumbers, delimiter);
+     std::vector<std::string> stringTokens = split(modifiedNumbers, delimiter);
 
     // Get the list of negative numbers from the pure function
     std::vector<int> negatives = checkForNegatives(numberList);
