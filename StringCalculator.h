@@ -14,7 +14,8 @@ public:
 private:
     std::vector<int> split(const std::string& numbers, const std::string& delimiter);
     std::string extractDelimiter(std::string& numbers);
+    void checkForNegatives(const std::vector<int>& numbers);
+    int ignoreNumbersGreaterThan1000(const std::vector<int>& numbers);
 };
 
 #endif // STRINGCALCULATOR_H
-
