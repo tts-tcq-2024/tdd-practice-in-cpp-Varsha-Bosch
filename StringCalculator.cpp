@@ -12,7 +12,7 @@ int StringCalculator::add(const std::string& numbers) {
     std::string delimiter = ",";
     std::string modifiedNumbers = numbers;
 
-   
+    // Check for custom delimiter
     if (numbers.rfind("//", 0) == 0) {
         delimiter = extractDelimiter(modifiedNumbers);
     }
@@ -20,18 +20,27 @@ int StringCalculator::add(const std::string& numbers) {
     // Replace newline with the delimiter to handle the "\n" case
     std::replace(modifiedNumbers.begin(), modifiedNumbers.end(), '\n', delimiter[0]);
 
-     std::vector<std::string> stringTokens = split(modifiedNumbers, delimiter);
+    // Split the modified numbers using the delimiter
+    std::vector<std::string> stringTokens = split(modifiedNumbers, delimiter);
 
-    // Get the list of negative numbers from the pure function
-    std::vector<int> negatives = checkForNegatives(numbers);
+    // Convert stringTokens to integers
+    std::vector<int> numberList;
+    for (const std::string& token : stringTokens) {
+        if (!token.empty()) {
+            numberList.push_back(std::stoi(token));
+        }
+    }
+
+    // Get the list of negative numbers
+    std::vector<int> negatives = checkForNegatives(numberList);
 
     // If there are any negative numbers, throw an exception
     if (!negatives.empty()) {
         throw std::runtime_error("negatives not allowed: " + formatNegatives(negatives));
     }
 
-    // Ignore numbers greater than 1000 and return the sum
-    return ignoreNumbersGreaterThan1000(numbers);
+    // Return the sum, ignoring numbers greater than 1000
+    return ignoreNumbersGreaterThan1000(numberList);
 }
 
 std::vector<int> StringCalculator::checkForNegatives(const std::vector<int>& numbers) {
@@ -68,6 +77,7 @@ int StringCalculator::ignoreNumbersGreaterThan1000(const std::vector<int>& numbe
     }
     return sum;
 }
+
 std::string StringCalculator::extractDelimiter(std::string& numbers) {
     std::string delimiter = ",";
     
