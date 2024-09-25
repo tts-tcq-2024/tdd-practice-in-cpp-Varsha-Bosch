@@ -16,6 +16,7 @@ private:
     std::string extractDelimiter(std::string& numbers);
     void checkForNegatives(const std::vector<int>& numbers);
     int ignoreNumbersGreaterThan1000(const std::vector<int>& numbers);
+    std::string formatNegatives(const std::vector<int>& negatives);
 };
 
 #endif // STRINGCALCULATOR_H
