@@ -23,7 +23,7 @@ int StringCalculator::add(const std::string& numbers) {
      std::vector<std::string> stringTokens = split(modifiedNumbers, delimiter);
 
     // Get the list of negative numbers from the pure function
-    std::vector<int> negatives = checkForNegatives(numberList);
+    std::vector<int> negatives = checkForNegatives(numbers);
 
     // If there are any negative numbers, throw an exception
     if (!negatives.empty()) {
@@ -31,7 +31,7 @@ int StringCalculator::add(const std::string& numbers) {
     }
 
     // Ignore numbers greater than 1000 and return the sum
-    return ignoreNumbersGreaterThan1000(numberList);
+    return ignoreNumbersGreaterThan1000(numbers);
 }
 
 std::vector<int> StringCalculator::checkForNegatives(const std::vector<int>& numbers) {
