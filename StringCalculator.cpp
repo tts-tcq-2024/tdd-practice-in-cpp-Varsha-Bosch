@@ -1,4 +1,5 @@
 #include "StringCalculator.h"
+#include <algorithm> // For std::copy_if, std::find_if
 
 // Main add method
 int StringCalculator::add(const std::string& numbers) {
@@ -57,16 +58,16 @@ std::string StringCalculator::extractDelimiter(std::string& numbers) {
     return delimiter;
 }
 
-// Check for negative numbers in the list and throw an exception if any are found
+// Refactored check for negative numbers
 void StringCalculator::checkForNegatives(const std::vector<int>& numbers) {
     std::vector<int> negatives;
 
-    for (int number : numbers) {
-        if (number < 0) {
-            negatives.push_back(number);
-        }
-    }
+    // Use std::copy_if to collect all negative numbers
+    std::copy_if(numbers.begin(), numbers.end(), std::back_inserter(negatives), [](int number) {
+        return number < 0;
+    });
 
+    // If there are any negative numbers, throw the exception
     if (!negatives.empty()) {
         std::ostringstream oss;
         oss << "negatives not allowed: ";
