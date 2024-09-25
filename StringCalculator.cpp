@@ -1,57 +1,71 @@
 #include "StringCalculator.h"
-#include <algorithm> 
-#include <numeric>  
-#include <sstream>   
-#include <stdexcept> 
+#include <algorithm>
+#include <numeric>
+#include <sstream>
+#include <stdexcept>
 
 int StringCalculator::add(const std::string& numbers) {
     if (numbers.empty()) {
         return 0;
     }
 
+    std::string delimiter = getDelimiter(numbers);
+    std::string modifiedNumbers = sanitizeInput(numbers, delimiter);
+
+    std::vector<int> numberList = convertToNumbers(modifiedNumbers, delimiter);
+
+    checkAndHandleNegatives(numberList);
+
+    return sumIgnoringLargeNumbers(numberList);
+}
+
+std::string StringCalculator::getDelimiter(const std::string& numbers) {
     std::string delimiter = ",";
-    std::string modifiedNumbers = numbers;
-
-    // Check for custom delimiter
     if (numbers.rfind("//", 0) == 0) {
-        delimiter = extractDelimiter(modifiedNumbers);
+        delimiter = extractDelimiter(numbers);
     }
+    return delimiter;
+}
 
-    // Replace newline with the delimiter to handle the "\n" case
+std::string StringCalculator::sanitizeInput(const std::string& numbers, const std::string& delimiter) {
+    std::string modifiedNumbers = numbers;
     std::replace(modifiedNumbers.begin(), modifiedNumbers.end(), '\n', delimiter[0]);
+    return modifiedNumbers;
+}
 
-    // Split the modified numbers using the delimiter
+std::vector<int> StringCalculator::convertToNumbers(const std::string& modifiedNumbers, const std::string& delimiter) {
     std::vector<std::string> stringTokens = split(modifiedNumbers, delimiter);
-
-    // Convert stringTokens to integers
     std::vector<int> numberList;
+
     for (const std::string& token : stringTokens) {
         if (!token.empty()) {
             numberList.push_back(std::stoi(token));
         }
     }
+    return numberList;
+}
 
-    // Get the list of negative numbers
-    std::vector<int> negatives = checkForNegatives(numberList);
-
-    // If there are any negative numbers, throw an exception
+void StringCalculator::checkAndHandleNegatives(const std::vector<int>& numbers) {
+    std::vector<int> negatives = checkForNegatives(numbers);
     if (!negatives.empty()) {
         throw std::runtime_error("negatives not allowed: " + formatNegatives(negatives));
     }
-
-    // Return the sum, ignoring numbers greater than 1000
-    return ignoreNumbersGreaterThan1000(numberList);
 }
+
+int StringCalculator::sumIgnoringLargeNumbers(const std::vector<int>& numbers) {
+    return std::accumulate(numbers.begin(), numbers.end(), 0, [](int sum, int number) {
+        return number <= 1000 ? sum + number : sum;
+    });
+}
+
+// Remainder of the methods (no changes needed)
 
 std::vector<int> StringCalculator::checkForNegatives(const std::vector<int>& numbers) {
     std::vector<int> negatives;
-
-    // Use std::copy_if to collect all negative numbers
     std::copy_if(numbers.begin(), numbers.end(), std::back_inserter(negatives), [](int number) {
         return number < 0;
     });
-
-    return negatives; // Returning the negatives (empty if none found)
+    return negatives;
 }
 
 std::string StringCalculator::formatNegatives(const std::vector<int>& negatives) {
@@ -59,34 +73,16 @@ std::string StringCalculator::formatNegatives(const std::vector<int>& negatives)
         return "";
     }
 
-    // Use std::accumulate to concatenate the negative numbers into a string
     return std::accumulate(negatives.begin() + 1, negatives.end(),
         std::to_string(negatives[0]), [](const std::string& a, int b) {
             return a + "," + std::to_string(b);
         });
 }
 
-// Ignore numbers greater than 1000 and return the sum
-int StringCalculator::ignoreNumbersGreaterThan1000(const std::vector<int>& numbers) {
-    int sum = 0;
-
-    for (int number : numbers) {
-        if (number <= 1000) {
-            sum += number;
-        }
-    }
-    return sum;
-}
-
 std::string StringCalculator::extractDelimiter(std::string& numbers) {
-    std::string delimiter = ",";
-    
-    if (numbers.rfind("//", 0) == 0) {
-        size_t newlinePos = numbers.find("\n");
-        delimiter = numbers.substr(2, newlinePos - 2);
-        numbers = numbers.substr(newlinePos + 1);  // Remove delimiter line from the numbers string
-    }
-    
+    size_t newlinePos = numbers.find("\n");
+    std::string delimiter = numbers.substr(2, newlinePos - 2);
+    numbers = numbers.substr(newlinePos + 1);  // Remove delimiter line from the numbers string
     return delimiter;
 }
 
