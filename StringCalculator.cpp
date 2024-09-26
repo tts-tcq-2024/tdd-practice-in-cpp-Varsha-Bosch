@@ -97,15 +97,22 @@ std::string StringCalculator::formatNegatives(const std::vector<int>& negatives)
         });
 }
 
-// Extract custom delimiter from the input string
 std::string StringCalculator::extractDelimiter(const std::string& numbers) {
     std::string delimiter = ",";
     if (numbers.rfind("//", 0) == 0) {
         size_t newlinePos = numbers.find("\n");
-        delimiter = numbers.substr(2, newlinePos - 2);
+        std::string delimiterPart = numbers.substr(2, newlinePos - 2);
+
+        // Handle delimiters enclosed in square brackets
+        if (delimiterPart.front() == '[' && delimiterPart.back() == ']') {
+            delimiter = delimiterPart.substr(1, delimiterPart.size() - 2);
+        } else {
+            delimiter = delimiterPart;
+        }
     }
     return delimiter;
 }
+
 
 // Split the string by the given delimiter
 std::vector<std::string> StringCalculator::split(const std::string& str, const std::string& delimiter) {
