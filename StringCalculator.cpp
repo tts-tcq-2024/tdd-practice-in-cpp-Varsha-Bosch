@@ -58,8 +58,6 @@ int StringCalculator::sumIgnoringLargeNumbers(const std::vector<int>& numbers) {
     });
 }
 
-// Remainder of the methods (no changes needed)
-
 std::vector<int> StringCalculator::checkForNegatives(const std::vector<int>& numbers) {
     std::vector<int> negatives;
     std::copy_if(numbers.begin(), numbers.end(), std::back_inserter(negatives), [](int number) {
@@ -79,10 +77,12 @@ std::string StringCalculator::formatNegatives(const std::vector<int>& negatives)
         });
 }
 
-std::string StringCalculator::extractDelimiter(std::string& numbers) {
-    size_t newlinePos = numbers.find("\n");
-    std::string delimiter = numbers.substr(2, newlinePos - 2);
-    numbers = numbers.substr(newlinePos + 1);  // Remove delimiter line from the numbers string
+std::string StringCalculator::extractDelimiter(const std::string& numbers) {
+    std::string delimiter = ",";
+    if (numbers.rfind("//", 0) == 0) {
+        size_t newlinePos = numbers.find("\n");
+        delimiter = numbers.substr(2, newlinePos - 2);
+    }
     return delimiter;
 }
 
