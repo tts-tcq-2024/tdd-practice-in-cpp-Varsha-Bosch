@@ -98,21 +98,33 @@ std::string StringCalculator::formatNegatives(const std::vector<int>& negatives)
 }
 
 std::string StringCalculator::extractDelimiter(const std::string& numbers) {
-    std::string delimiter = ",";
-    if (numbers.rfind("//", 0) == 0) {
-        size_t newlinePos = numbers.find("\n");
-        std::string delimiterPart = numbers.substr(2, newlinePos - 2);
-
-        // Handle delimiters enclosed in square brackets
-        if (delimiterPart.front() == '[' && delimiterPart.back() == ']') {
-            delimiter = delimiterPart.substr(1, delimiterPart.size() - 2);
-        } else {
-            delimiter = delimiterPart;
-        }
+    if (isCustomDelimiter(numbers)) {
+        return parseCustomDelimiter(numbers);
     }
-    return delimiter;
+    return ",";
 }
 
+bool StringCalculator::isCustomDelimiter(const std::string& numbers) const {
+    return numbers.rfind("//", 0) == 0;
+}
+
+std::string StringCalculator::parseCustomDelimiter(const std::string& numbers) const {
+    size_t newlinePos = numbers.find("\n");
+    std::string delimiterPart = numbers.substr(2, newlinePos - 2);
+
+    if (isBracketedDelimiter(delimiterPart)) {
+        return extractBracketedDelimiter(delimiterPart);
+    }
+    return delimiterPart;
+}
+
+bool StringCalculator::isBracketedDelimiter(const std::string& delimiterPart) const {
+    return delimiterPart.front() == '[' && delimiterPart.back() == ']';
+}
+
+std::string StringCalculator::extractBracketedDelimiter(const std::string& delimiterPart) const {
+    return delimiterPart.substr(1, delimiterPart.size() - 2);
+}
 
 // Split the string by the given delimiter
 std::vector<std::string> StringCalculator::split(const std::string& str, const std::string& delimiter) {
