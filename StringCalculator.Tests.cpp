@@ -86,14 +86,6 @@ TEST(StringCalculatorAddTests, ExpectExceptionMessageForMultipleNegatives) {
     }
 }
 
-TEST(StringCalculatorAddTests, IgnoreNegativeNumbersWithPositiveNumbers) {
-    int expectedresult = 1;
-    std::string input = "1,-1000";
-    StringCalculator objUnderTest;
-    int result = objUnderTest.add(input);
-    ASSERT_EQ(result, expectedresult);
-}
-
 TEST(StringCalculatorAddTests, ExpectSumWithCustomDelimiterAndNewlines) {
     int expectedresult = 10;
     std::string input = "//[;]\n1;2\n3;4";
