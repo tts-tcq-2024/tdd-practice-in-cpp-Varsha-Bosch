@@ -19,7 +19,7 @@ private:
    
     std::vector<int> checkForNegatives(const std::vector<int>& numbers); 
     std::string formatNegatives(const std::vector<int>& negatives);
-    std::string extractDelimiter(std::string& numbers); 
+    std::string extractDelimiter(const std::string& numbers);
     std::vector<std::string> split(const std::string& str, const std::string& delimiter); 
 };
 
